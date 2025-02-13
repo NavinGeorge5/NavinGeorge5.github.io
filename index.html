@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <img id="cinnamoroll-img" src="https://media.tenor.com/CdCtIjQzLsIAAAAi/cinnamoroll-kawaii.gif">
+        <h1>Will You Be My Valentine?</h1>
+        <div class="buttons">
+            <button id="yes-btn" onclick="acceptValentine()" onmouseover="showSweetMessage()">Yes</button>
+            <button id="no-btn" onclick="makeHarderToSayNo()" onmouseover="tryToEscape()">No</button>
+        </div>
+        <div class="sweet-message" id="sweet-message"></div>
+    </div>
+
+    <script>
+        let noCount = 0;
+        let hearts = [];
+        const sweetMessages = [
+            "You're amazing! 💖",
+            "You make me smile! 😊",
+            "You're the best! ✨"
+        ];
+        
+        setInterval(createHeart, 2000);
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💗';
+            heart.style.left = Math.random() * 100 + 'vw';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 4000);
+        }
+
+        function showSweetMessage() {
+            const message = document.getElementById('sweet-message');
+            message.textContent = sweetMessages[Math.floor(Math.random() * sweetMessages.length)];
+            message.style.opacity = '1';
+            setTimeout(() => message.style.opacity = '0', 1000);
+        }
+
+        function increaseYesButtonSize() {
+            const yesBtn = document.getElementById('yes-btn');
+            const currentYesSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentYesSize + 4) + 'px';
+        }
+
+        function tryToEscape() {
+            if (noCount > 0) {
+                moveNoButton();
+                increaseYesButtonSize();
+            }
+        }
+        
+        function acceptValentine() {
+            document.getElementById('cinnamoroll-img').src = 'https://media.tenor.com/xIEKHAcKvv8AAAAi/sanrio.gif';
+            document.querySelector('h1').textContent = 'Happy Valentine\'s Day! 💖';
+            const noBtn = document.getElementById('no-btn');
+            if (noBtn) noBtn.remove();
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+            
+            document.getElementById('yes-btn').disabled = true;
+        }
+
+        function moveNoButton() {
+            const noBtn = document.getElementById('no-btn');
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+            
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+            
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+        }
+
+        function makeHarderToSayNo() {
+            noCount++;
+            const yesBtn = document.getElementById('yes-btn');
+            const noBtn = document.getElementById('no-btn');
+            
+            const currentYesSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentYesSize + 4) + 'px';
+            
+            const currentNoSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
+            noBtn.style.fontSize = Math.max(8, currentNoSize - 2) + 'px';
+            
+            if (!noBtn.classList.contains('random-mode')) {
+                noBtn.classList.add('random-mode');
+                document.body.appendChild(noBtn);
+            }
+            
+            moveNoButton();
+        }
+    </script>
+</body>
+</html>
