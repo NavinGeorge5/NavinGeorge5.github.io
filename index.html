@@ -52,10 +52,13 @@
         }
 
         function tryToEscape() {
-            if (noCount > 0) {
-                moveNoButton();
-                increaseYesButtonSize();
+            const noBtn = document.getElementById('no-btn');
+            if (!noBtn.classList.contains('random-mode')) {
+                noBtn.classList.add('random-mode');
+                document.body.appendChild(noBtn);
             }
+            moveNoButton();
+            increaseYesButtonSize();
         }
         
         function acceptValentine() {
